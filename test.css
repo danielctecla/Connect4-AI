@@ -1,0 +1,28 @@
+/* Estilos básicos del tablero */
+.board {
+    display: flex;
+}
+
+.column {
+    width: 100px;
+    height: 600px;
+    display: flex;
+    flex-direction: column-reverse;
+    cursor: pointer;
+}
+
+.cell {
+    width: 80px;
+    height: 80px;
+    border: 1px solid black;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+}
