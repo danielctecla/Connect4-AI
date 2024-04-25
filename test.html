@@ -6,9 +6,27 @@
     <title>Conecta 4</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='test.css'>
+
 </head>
 <body>
-    <div class="board" id="board"></div>
-    <script src="minmax-alpha-beta.js"></script>
+	<section class = "principal">
+		<div class="board" id="board"></div>
+		<div class = "opciones">
+			<h2>Elegir la dificultad</h2>
+			<div class="radio">
+				<input type="radio" id="dificil" name="dificultad" value="6">
+				<label for="dificil">Dificil</label>
+				<input type="radio" id="normal" name="dificultad" value="3" checked>
+				<label for="normal">Normal</label>
+				<input type="radio" id="facil" name="dificultad" value="1">
+				<label for="facil">Facil</label>
+			</div>
+		</div>
+		<div class = "button">
+			<button class="btn pulse-effect" id="start">Iniciar</button>
+			<button class="btn pulse-effect" id = "reset"> Reiniciar</button>
+		</div>
+	</section>
+	<script src="minmax-alpha-beta.js"></script>
 </body>
 </html>

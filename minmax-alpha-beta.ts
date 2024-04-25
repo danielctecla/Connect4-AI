@@ -10,19 +10,32 @@ const AI_TURN: number = 1;
 const PLAYER_PIECE: number = 1;
 const AI_PIECE: number = 2;
 
+//depth
+let depth: number;
+
 let game_over: boolean = false;
 let not_over: boolean = true;
 let turn: number = Math.floor(Math.random() * 2);
 
 const board = createBoard();
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    drawBoard();
-    if(turn === AI_TURN){
-        dropPieceAI();
-    }else{
-        console.log("Player's turn");
-    }
+document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById("start");
+	const value = document.querySelectorAll<HTMLInputElement>('input[name="dificultad"]');
+	btn?.addEventListener("click",function(){
+		value.forEach(num => {
+			if(num.checked){
+				depth = parseInt(num.value, 10);
+			}
+		})
+		console.log("La profundidad es: ",depth);
+		drawBoard();
+		if(turn === AI_TURN){
+			dropPieceAI();
+		}else{
+			console.log("Player's turn");
+		}
+	});
 });
 
 function createBoard(): number[][] {
@@ -320,8 +333,7 @@ function dropPieceInit(col: number): void {
 
 function dropPieceAI(): void{
     console.log("AI's turn");
-
-    const [col,_]   = minimax(board, 5, -Infinity, Infinity, true);
+    const [col,_]   = minimax(board, depth, -Infinity, Infinity, true);
     if (col === null || !isValidLocation(board, col)) return;
 
     const row: number = getNextOpenRow(board, col);

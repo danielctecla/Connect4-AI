@@ -1,11 +1,138 @@
 /* Estilos básicos del tablero */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body{
+	background-color: #407B7B;
+}
+
 .board {
-    display: flex;
+	position: absolute;
+	display: flex;
+	left: 0;
+	top: 0;
+	border: 1px solid black; 
+	width: 50%;  /* El div ocupará el 50% del ancho de la ventana de visualización */
+    height: 100%;
+	background-color: #0056b3
+}
+
+.opciones {
+	position: absolute; 
+	top: 15%;
+	right: 14%;
+	flex-direction: column;
+    justify-content: center;
+	width: 20%;
+	background-color: #fff;
+}
+
+.opciones h2 {
+	font-family: "Roboto", sans-serif;
+	font-weight: 500;
+	font-size: 30px;
+    color: #001F3F;
+    margin-bottom: 20px;
+    margin-left: 15px; 
+}
+
+.opciones label {
+    display: block; /* Hace que cada etiqueta se muestre en una nueva línea */
+    margin-bottom: 15px; /* Espacio entre las opciones */
+	font-family: 'Arial', sans-serif;
+	font-size: 18px;
+	display: block;
+    cursor: pointer;
+    color: #15BCC7;
+    position: relative;
+    padding: 5px 15px 5px 51px;
+    font-size: 2em;
+    border-radius: 5px;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease; 
+}
+
+.opciones label:hover{
+      background: rgba(155, 85, 64, 0.1); 
+}
+
+.opciones label:before{
+    content: "";
+    display: block;
+    width: 17px;
+    height: 17px;
+    position: absolute;
+	top: 12px; 
+    left: 13px;
+    border-radius: 50%;
+    background: none;
+    /*border: 3px solid #004136; */
+}
+
+.opciones input[type="radio"] {
+    display: none; 
+}
+
+.opciones input[type="radio"]:checked + label:before {
+    display: none;
+	background-color: #fff; /* Cambia a un color sólido que indique la selección */
+    border-color: #15BCC7;
+}
+
+.opciones input[type="radio"]:checked + label {
+    background: #F24136;
+	background-color: #5E3DD6;
+    border-radius: 2px;
+    color: #fff; 
+}
+
+.button {
+	position: absolute;
+	display: flex;
+	top: 60%;
+	right: 15%;
+	flex-direction: column;
+    justify-content: center;
+	align-items: center;
+	width: 18%;
+}
+
+.btn{
+    text-decoration: none;
+    padding: 20px 50px;
+    font-size: 1.5rem;
+    margin: 15px;
+}
+
+.pulse-effect {
+	border: none;
+	color: white;
+	padding: 12px 28px;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: #2A9E6B; /* Color base del botón */
+	transition: transform 0.3s ease-in-out; /* Transición suave del efecto de pulsación */
+}
+
+.pulse-effect:hover {
+  background-color: #3AD469; /* Cambia el color al pasar el cursor sobre el botón */
+}
+
+.pulse-effect:active {
+  transform: scale(0.9); /* Reduce ligeramente el tamaño del botón cuando se hace clic */
+}
+
+.principal {
+	background-color: #777; 
+	min-height: 600px; 
+	position: relative;
+	width: 100%;  
+    height: auto;
 }
 
 .column {
     width: 100px;
-    height: 600px;
+    height: 580px;
     display: flex;
     flex-direction: column-reverse;
     cursor: pointer;
@@ -17,6 +144,7 @@
     border: 1px solid black;
     border-radius: 50%;
     margin: 5px;
+	background-color: #ffffff;
 }
 
 .red {
@@ -26,3 +154,4 @@
 .yellow {
     background-color: yellow;
 }
+
