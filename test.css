@@ -155,3 +155,18 @@ body{
     background-color: yellow;
 }
 
+@keyframes dropAnimation {
+  0% {
+    transform: translateY(-500px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.falling {
+  animation: dropAnimation 0.5s ease-out;
+}
+

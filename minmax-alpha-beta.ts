@@ -310,15 +310,46 @@ function minimax(board: number[][], depth: number, alpha: number, beta: number, 
     }
 }
 
+function calculateDropDuration(row: number): number {
+    const maxRow = ROWS - 1;
+    const durationPerRow = 0.1; // Duración de la caída por fila
+    return (maxRow - row) * durationPerRow;
+}
+
 function dropPieceInit(col: number): void {
     console.log("Player's turn");
     if (!isValidLocation(board, col)) return;
 
     const row: number = getNextOpenRow(board, col);
     if (row === -1) return;
-
+	
     dropPiece(board, row, col, PLAYER_PIECE);
-    
+	
+	drawBoard();
+
+    // Encuentra la celda específica donde la ficha fue colocada.
+    const columns = document.getElementsByClassName('column');
+    const columnDOM = columns[col] as HTMLElement;
+    const cellDOM = columnDOM.children[ROWS - 1 - row] as HTMLElement; // Ajusta según la inversión del flex-direction.
+
+    // Asegúrate de que la celda obtenida es la correcta.
+    if (!(cellDOM instanceof HTMLElement)) {
+        console.error('No se pudo obtener la celda DOM correcta.');
+        return;
+    }
+
+    // Aplica la animación solo a la celda recién colocada.
+    const animationDuration = calculateDropDuration(row);
+    cellDOM.classList.add('falling');
+    cellDOM.style.animation = `dropAnimation ${animationDuration}s ease-out forwards`;
+
+    cellDOM.addEventListener('animationend', () => {
+        // Limpia la animación después de que termine.
+        cellDOM.classList.remove('falling');
+        cellDOM.style.animation = '';
+    });
+
+
     if(winningMove(board, PLAYER_PIECE)){
         alert(`¡El jugador ${turn === 0 ? 'Rojo' : 'Amarillo'} ha ganado!`);
         drawBoardWon();
@@ -326,9 +357,14 @@ function dropPieceInit(col: number): void {
     }
 
     turn = turn === 0 ? 1 : 0;
-    drawBoard();
+    //drawBoard();
     
-    dropPieceAI();
+    //dropPieceAI();
+	setTimeout(() => {
+        if (turn === AI_TURN) {
+            dropPieceAI();
+        }
+    }, animationDuration * 2100);
 }
 
 function dropPieceAI(): void{
@@ -338,6 +374,31 @@ function dropPieceAI(): void{
 
     const row: number = getNextOpenRow(board, col);
     dropPiece(board, row, col, AI_PIECE);
+	
+	drawBoard();
+
+    // Encuentra la celda específica donde la ficha fue colocada.
+    const columns = document.getElementsByClassName('column');
+    const columnDOM = columns[col] as HTMLElement;
+    const cellDOM = columnDOM.children[ROWS - 1 - row] as HTMLElement; // Ajusta según la inversión del flex-direction.
+
+    // Asegúrate de que la celda obtenida es la correcta.
+    if (!(cellDOM instanceof HTMLElement)) {
+        console.error('No se pudo obtener la celda DOM correcta.');
+        return;
+    }
+
+    // Aplica la animación solo a la celda recién colocada.
+    const animationDuration = calculateDropDuration(row);
+    cellDOM.classList.add('falling');
+    cellDOM.style.animation = `dropAnimation ${animationDuration}s ease-out forwards`;
+
+    cellDOM.addEventListener('animationend', () => {
+        // Limpia la animación después de que termine.
+        cellDOM.classList.remove('falling');
+        cellDOM.style.animation = '';
+    });
+
 
     if(winningMove(board, AI_PIECE)){
         alert(`¡El jugador ${turn === 0 ? 'Rojo' : 'Amarillo'} ha ganado!`);
@@ -346,5 +407,5 @@ function dropPieceAI(): void{
     }
         
     turn = turn === 0 ? 1 : 0;
-    drawBoard();
+    //drawBoard();
 }

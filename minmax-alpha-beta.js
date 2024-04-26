@@ -270,6 +270,11 @@ function minimax(board, depth, alpha, beta, maximizingPlayer) {
         return [column, value];
     }
 }
+function calculateDropDuration(row) {
+    var maxRow = ROWS - 1;
+    var durationPerRow = 0.1; // Duración de la caída por fila
+    return (maxRow - row) * durationPerRow;
+}
 function dropPieceInit(col) {
     console.log("Player's turn");
     if (!isValidLocation(board, col))
@@ -278,14 +283,38 @@ function dropPieceInit(col) {
     if (row === -1)
         return;
     dropPiece(board, row, col, PLAYER_PIECE);
+    drawBoard();
+    // Encuentra la celda específica donde la ficha fue colocada.
+    var columns = document.getElementsByClassName('column');
+    var columnDOM = columns[col];
+    var cellDOM = columnDOM.children[ROWS - 1 - row]; // Ajusta según la inversión del flex-direction.
+    // Asegúrate de que la celda obtenida es la correcta.
+    if (!(cellDOM instanceof HTMLElement)) {
+        console.error('No se pudo obtener la celda DOM correcta.');
+        return;
+    }
+    // Aplica la animación solo a la celda recién colocada.
+    var animationDuration = calculateDropDuration(row);
+    cellDOM.classList.add('falling');
+    cellDOM.style.animation = "dropAnimation ".concat(animationDuration, "s ease-out forwards");
+    cellDOM.addEventListener('animationend', function () {
+        // Limpia la animación después de que termine.
+        cellDOM.classList.remove('falling');
+        cellDOM.style.animation = '';
+    });
     if (winningMove(board, PLAYER_PIECE)) {
         alert("\u00A1El jugador ".concat(turn === 0 ? 'Rojo' : 'Amarillo', " ha ganado!"));
         drawBoardWon();
         return;
     }
     turn = turn === 0 ? 1 : 0;
-    drawBoard();
-    dropPieceAI();
+    //drawBoard();
+    //dropPieceAI();
+    setTimeout(function () {
+        if (turn === AI_TURN) {
+            dropPieceAI();
+        }
+    }, animationDuration * 2000);
 }
 function dropPieceAI() {
     console.log("AI's turn");
@@ -294,11 +323,30 @@ function dropPieceAI() {
         return;
     var row = getNextOpenRow(board, col);
     dropPiece(board, row, col, AI_PIECE);
+    drawBoard();
+    // Encuentra la celda específica donde la ficha fue colocada.
+    var columns = document.getElementsByClassName('column');
+    var columnDOM = columns[col];
+    var cellDOM = columnDOM.children[ROWS - 1 - row]; // Ajusta según la inversión del flex-direction.
+    // Asegúrate de que la celda obtenida es la correcta.
+    if (!(cellDOM instanceof HTMLElement)) {
+        console.error('No se pudo obtener la celda DOM correcta.');
+        return;
+    }
+    // Aplica la animación solo a la celda recién colocada.
+    var animationDuration = calculateDropDuration(row);
+    cellDOM.classList.add('falling');
+    cellDOM.style.animation = "dropAnimation ".concat(animationDuration, "s ease-out forwards");
+    cellDOM.addEventListener('animationend', function () {
+        // Limpia la animación después de que termine.
+        cellDOM.classList.remove('falling');
+        cellDOM.style.animation = '';
+    });
     if (winningMove(board, AI_PIECE)) {
         alert("\u00A1El jugador ".concat(turn === 0 ? 'Rojo' : 'Amarillo', " ha ganado!"));
         drawBoardWon();
         return;
     }
     turn = turn === 0 ? 1 : 0;
-    drawBoard();
+    //drawBoard();
 }
