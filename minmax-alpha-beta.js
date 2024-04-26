@@ -15,7 +15,9 @@ var turn = Math.floor(Math.random() * 2);
 var board = createBoard();
 document.addEventListener('DOMContentLoaded', function () {
     var btn = document.getElementById("start");
+    var resetButton = document.getElementById("reset");
     var value = document.querySelectorAll('input[name="dificultad"]');
+    drawBoardWon();
     btn === null || btn === void 0 ? void 0 : btn.addEventListener("click", function () {
         value.forEach(function (num) {
             if (num.checked) {
@@ -30,8 +32,37 @@ document.addEventListener('DOMContentLoaded', function () {
         else {
             console.log("Player's turn");
         }
+        btn.style.display = 'none';
+        if (resetButton) {
+            resetButton.style.display = 'block';
+        }
+        mostrarTurno();
+    });
+    resetButton === null || resetButton === void 0 ? void 0 : resetButton.addEventListener("click", function () {
+        board = createBoard();
+        drawBoardWon();
+        game_over = false;
+        not_over = true;
+        turn = Math.floor(Math.random() * 2);
+        resetButton.style.display = 'none';
+        if (btn) {
+            btn.style.display = 'block';
+        }
+        var turnoMain = document.getElementById('turno-main');
+        if (turnoMain) {
+            turnoMain.style.display = 'none';
+        }
     });
 });
+function mostrarTurno() {
+    var turnoMain = document.getElementById('turno-main');
+    if (turnoMain) {
+        var turnoHtml = "\n            <h2 style=\"color: #F2F3F4\">Turno</h2>\n            <div style=\"color: #F2F3F4\">".concat(turn === AI_TURN ? 'Maquina' : 'Humano', "</div>\n        ");
+        // Actualiza el contenido del contenedor
+        turnoMain.innerHTML = turnoHtml;
+        turnoMain.style.display = 'block';
+    }
+}
 function createBoard() {
     var board = [];
     for (var i = 0; i < ROWS; i++) {
@@ -97,7 +128,6 @@ function drawBoard() {
         console.error("No se encontró el elemento del tablero");
         return;
     }
-    // Limpiar el tablero antes de redibujarlo
     boardElement.innerHTML = '';
     var _loop_1 = function (c) {
         var column = document.createElement('div');
@@ -273,7 +303,16 @@ function minimax(board, depth, alpha, beta, maximizingPlayer) {
 function calculateDropDuration(row) {
     var maxRow = ROWS - 1;
     var durationPerRow = 0.1; // Duración de la caída por fila
-    return (maxRow - row) * durationPerRow;
+    return (maxRow - (maxRow - row)) * durationPerRow;
+}
+function mostrarGanador(winner) {
+    var turnoMain = document.getElementById('turno-main');
+    if (turnoMain) {
+        var turnoHtml = "\n            <h2 style=\"color: #F2F3F4;\">Ganador ".concat(winner === AI_TURN ? 'Maquina' : 'Humano', "</h2>\n            <div style=\"color: #F2F3F4;\"></div>\n        ");
+        // Actualiza el contenido del contenedor
+        turnoMain.innerHTML = turnoHtml;
+        turnoMain.style.display = 'block';
+    }
 }
 function dropPieceInit(col) {
     console.log("Player's turn");
@@ -298,23 +337,23 @@ function dropPieceInit(col) {
     cellDOM.classList.add('falling');
     cellDOM.style.animation = "dropAnimation ".concat(animationDuration, "s ease-out forwards");
     cellDOM.addEventListener('animationend', function () {
-        // Limpia la animación después de que termine.
         cellDOM.classList.remove('falling');
         cellDOM.style.animation = '';
     });
     if (winningMove(board, PLAYER_PIECE)) {
-        alert("\u00A1El jugador ".concat(turn === 0 ? 'Rojo' : 'Amarillo', " ha ganado!"));
+        mostrarGanador(turn);
         drawBoardWon();
         return;
     }
     turn = turn === 0 ? 1 : 0;
     //drawBoard();
     //dropPieceAI();
+    mostrarTurno();
     setTimeout(function () {
         if (turn === AI_TURN) {
             dropPieceAI();
         }
-    }, animationDuration * 2000);
+    }, animationDuration * 2100);
 }
 function dropPieceAI() {
     console.log("AI's turn");
@@ -334,7 +373,7 @@ function dropPieceAI() {
         return;
     }
     // Aplica la animación solo a la celda recién colocada.
-    var animationDuration = calculateDropDuration(row);
+    var animationDuration = calculateDropDuration(row) * 2;
     cellDOM.classList.add('falling');
     cellDOM.style.animation = "dropAnimation ".concat(animationDuration, "s ease-out forwards");
     cellDOM.addEventListener('animationend', function () {
@@ -343,10 +382,10 @@ function dropPieceAI() {
         cellDOM.style.animation = '';
     });
     if (winningMove(board, AI_PIECE)) {
-        alert("\u00A1El jugador ".concat(turn === 0 ? 'Rojo' : 'Amarillo', " ha ganado!"));
+        mostrarGanador(turn);
         drawBoardWon();
         return;
     }
     turn = turn === 0 ? 1 : 0;
-    //drawBoard();
+    mostrarTurno();
 }

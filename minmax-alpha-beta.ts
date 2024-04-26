@@ -17,11 +17,14 @@ let game_over: boolean = false;
 let not_over: boolean = true;
 let turn: number = Math.floor(Math.random() * 2);
 
-const board = createBoard();
+let board = createBoard();
 
 document.addEventListener('DOMContentLoaded', function(){
     const btn = document.getElementById("start");
+    const resetButton = document.getElementById("reset");
 	const value = document.querySelectorAll<HTMLInputElement>('input[name="dificultad"]');
+    drawBoardWon();
+
 	btn?.addEventListener("click",function(){
 		value.forEach(num => {
 			if(num.checked){
@@ -35,8 +38,45 @@ document.addEventListener('DOMContentLoaded', function(){
 		}else{
 			console.log("Player's turn");
 		}
+
+        btn.style.display = 'none';
+        if (resetButton) {
+            resetButton.style.display = 'block';
+        }
+        mostrarTurno();
 	});
+
+    resetButton?.addEventListener("click", function(){
+        board = createBoard();
+        drawBoardWon();
+        game_over = false;
+        not_over = true;
+        turn = Math.floor(Math.random() * 2);
+        resetButton.style.display = 'none';
+        if (btn) {
+            btn.style.display = 'block';
+        }
+
+        const turnoMain = document.getElementById('turno-main');
+        if (turnoMain) {
+            turnoMain.style.display = 'none';
+        }
+    });
 });
+
+function mostrarTurno() {
+    const turnoMain = document.getElementById('turno-main');
+    if (turnoMain) {
+        const turnoHtml = `
+            <h2 style="color: #F2F3F4">Turno</h2>
+            <div style="color: #F2F3F4">${turn === AI_TURN ? 'Maquina' : 'Humano'}</div>
+        `;
+
+        // Actualiza el contenido del contenedor
+        turnoMain.innerHTML = turnoHtml;
+        turnoMain.style.display = 'block';
+    }
+}
 
 function createBoard(): number[][] {
     const board: number[][] = [];
@@ -114,7 +154,6 @@ function drawBoard(): void {
         return;
     }
 
-    // Limpiar el tablero antes de redibujarlo
     boardElement.innerHTML = '';
 
     for (let c = 0; c < COLS; c++) {
@@ -313,7 +352,21 @@ function minimax(board: number[][], depth: number, alpha: number, beta: number, 
 function calculateDropDuration(row: number): number {
     const maxRow = ROWS - 1;
     const durationPerRow = 0.1; // Duración de la caída por fila
-    return (maxRow - row) * durationPerRow;
+    return (maxRow - (maxRow - row)) * durationPerRow;
+}
+
+function mostrarGanador(winner: number) {
+    const turnoMain = document.getElementById('turno-main');
+    if (turnoMain) {
+        const turnoHtml = `
+            <h2 style="color: #F2F3F4;">Ganador ${winner === AI_TURN ? 'Maquina' : 'Humano'}</h2>
+            <div style="color: #F2F3F4;"></div>
+        `;
+
+        // Actualiza el contenido del contenedor
+        turnoMain.innerHTML = turnoHtml;
+        turnoMain.style.display = 'block';
+    }
 }
 
 function dropPieceInit(col: number): void {
@@ -344,14 +397,13 @@ function dropPieceInit(col: number): void {
     cellDOM.style.animation = `dropAnimation ${animationDuration}s ease-out forwards`;
 
     cellDOM.addEventListener('animationend', () => {
-        // Limpia la animación después de que termine.
         cellDOM.classList.remove('falling');
         cellDOM.style.animation = '';
     });
 
 
     if(winningMove(board, PLAYER_PIECE)){
-        alert(`¡El jugador ${turn === 0 ? 'Rojo' : 'Amarillo'} ha ganado!`);
+        mostrarGanador(turn);
         drawBoardWon();
         return;
     }
@@ -360,6 +412,7 @@ function dropPieceInit(col: number): void {
     //drawBoard();
     
     //dropPieceAI();
+    mostrarTurno();
 	setTimeout(() => {
         if (turn === AI_TURN) {
             dropPieceAI();
@@ -389,7 +442,7 @@ function dropPieceAI(): void{
     }
 
     // Aplica la animación solo a la celda recién colocada.
-    const animationDuration = calculateDropDuration(row);
+    const animationDuration = calculateDropDuration(row) * 2;
     cellDOM.classList.add('falling');
     cellDOM.style.animation = `dropAnimation ${animationDuration}s ease-out forwards`;
 
@@ -401,11 +454,11 @@ function dropPieceAI(): void{
 
 
     if(winningMove(board, AI_PIECE)){
-        alert(`¡El jugador ${turn === 0 ? 'Rojo' : 'Amarillo'} ha ganado!`);
+        mostrarGanador(turn);
         drawBoardWon();
         return;
     }
-        
+
     turn = turn === 0 ? 1 : 0;
-    //drawBoard();
+    mostrarTurno();
 }

@@ -2,51 +2,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 body{
-	background-color: #407B7B;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: #1C2833;
 }
 
-.board {
-	position: absolute;
-	display: flex;
-	left: 0;
-	top: 0;
-	border: 1px solid black; 
-	width: 50%;  /* El div ocupará el 50% del ancho de la ventana de visualización */
-    height: 100%;
-	background-color: #0056b3
+.container{
+    display: flex;
+    justify-content: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    gap: 4rem;
 }
 
 .opciones {
-	position: absolute; 
-	top: 15%;
-	right: 14%;
 	flex-direction: column;
-    justify-content: center;
-	width: 20%;
-	background-color: #fff;
 }
 
 .opciones h2 {
-	font-family: "Roboto", sans-serif;
-	font-weight: 500;
-	font-size: 30px;
-    color: #001F3F;
-    margin-bottom: 20px;
-    margin-left: 15px; 
+    text-align: center;
+	font-weight: 1rem;
+	font-size: 1.5rem;
+    color: #F4F6F7;
+    margin: 0;
+    margin-bottom: 1rem;
 }
 
 .opciones label {
-    display: block; /* Hace que cada etiqueta se muestre en una nueva línea */
-    margin-bottom: 15px; /* Espacio entre las opciones */
-	font-family: 'Arial', sans-serif;
-	font-size: 18px;
-	display: block;
+    padding: 0.3rem 2.5rem;
+    display: block;
+	font-size: 1.5rem;
     cursor: pointer;
-    color: #15BCC7;
-    position: relative;
-    padding: 5px 15px 5px 51px;
-    font-size: 2em;
-    border-radius: 5px;
     -webkit-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease; 
@@ -56,17 +43,9 @@ body{
       background: rgba(155, 85, 64, 0.1); 
 }
 
-.opciones label:before{
-    content: "";
-    display: block;
-    width: 17px;
-    height: 17px;
-    position: absolute;
-	top: 12px; 
-    left: 13px;
-    border-radius: 50%;
-    background: none;
-    /*border: 3px solid #004136; */
+.radio{
+    background-color: #F2F3F4;
+    border-radius: 0.5rem;
 }
 
 .opciones input[type="radio"] {
@@ -82,24 +61,18 @@ body{
 .opciones input[type="radio"]:checked + label {
     background: #F24136;
 	background-color: #5E3DD6;
-    border-radius: 2px;
-    color: #fff; 
+    color: #fff;
+    border-radius: 0.2rem;
 }
 
 .button {
-	position: absolute;
-	display: flex;
-	top: 60%;
-	right: 15%;
+	display: flex;  
 	flex-direction: column;
     justify-content: center;
-	align-items: center;
-	width: 18%;
 }
 
 .btn{
     text-decoration: none;
-    padding: 20px 50px;
     font-size: 1.5rem;
     margin: 15px;
 }
@@ -123,24 +96,32 @@ body{
 }
 
 .principal {
-	background-color: #777; 
+    display: flex;
 	min-height: 600px; 
-	position: relative;
 	width: 100%;  
     height: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.board {
+	display: flex;
+    padding: 0.5rem;
+	background-color: #0056b3;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .column {
-    width: 100px;
-    height: 580px;
     display: flex;
     flex-direction: column-reverse;
     cursor: pointer;
 }
 
 .cell {
-    width: 80px;
-    height: 80px;
+    width: 3.5rem;
+    height: 3.5rem;
     border: 1px solid black;
     border-radius: 50%;
     margin: 5px;
@@ -157,7 +138,7 @@ body{
 
 @keyframes dropAnimation {
   0% {
-    transform: translateY(-500px);
+    transform: translateY(-15rem);
     opacity: 0;
   }
   100% {
@@ -167,6 +148,7 @@ body{
 }
 
 .falling {
-  animation: dropAnimation 0.5s ease-out;
+  animation: dropAnimation 1s ease-out;
 }
+
 
